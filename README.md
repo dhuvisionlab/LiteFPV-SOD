@@ -50,7 +50,7 @@ LiteFPV-SOD consists of four main components:
    Reduces computational complexity by separating spatial filtering and channel mixing.
 
 <p align="center">
-  <img src="assets/litefpv_sod_architecture.png" width="900">
+  <img src="images/Fig.1.jpg" width="900">
 </p>
 
 ---
