@@ -356,18 +356,18 @@ LiteFPV-SOD/
 
 ## Citation
 
-If this work is useful for your research, please cite:
+If this work is useful for your research, please cite our paper:
 
 ```bibtex
-@article{jobaer2026litefpvsod,
-  title   = {LiteFPV-SOD: An Ultra-Lightweight Detector for Real-Time Small-Object Detection on Edge-Deployed FPV Drones},
-  author  = {Jobaer, Sayed and Muzahid, A. A. M. and Hussain, Muhammad Ather Iqbal and Ahmed, Foysal and Tang, Xue-song and Gan, Yuan and Bai, Xiaoshan and Habib, Tushar MD Ahasan and Ahmed, Kh Shaikh and Shaha, Rony and Das, Sayekat Kumar and Han, Hua and Sohel, Ferdous},
-  journal = {Preprint},
-  year    = {2026}
+@misc{jobaer2026litefpvsod,
+  title        = {{LiteFPV-SOD}: An Ultra-Lightweight Detector for Real-Time Small-Object Detection on Edge-Deployed {FPV} Drones},
+  author       = {Jobaer, Sayed and Muzahid, A. A. M. and Hussain, Muhammad Ather Iqbal and Ahmed, Foysal and Tang, Xue-song and Gan, Yuan and Bai, Xiaoshan and Habib, Tushar MD Ahasan and Ahmed, Kh Shaikh and Shaha, Rony and Das, Sayekat Kumar and Han, Hua and Sohel, Ferdous},
+  year         = {2026},
+  note         = {Preprint},
+  url          = {https://github.com/dhuvisionlab/LiteFPV-SOD}
 }
 ```
 
----
 
 ## Acknowledgements
 
