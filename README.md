@@ -1,4 +1,4 @@
-# LiteUAV-Det<br>
+# LiteFPV-SOD<br>
 This repos contains the official codes for papers:<br>
 <br>
 **LiteFPV-SOD: An Ultra-Lightweight Detector for Real-Time Small-Object Detection on Edge-Deployed FPV Drones**<br>
