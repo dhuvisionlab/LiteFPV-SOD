@@ -6,9 +6,17 @@
 [![License](https://img.shields.io/badge/License-TBD-lightgrey.svg)](#license)
 [![Paper](https://img.shields.io/badge/Paper-Preprint-orange.svg)](#citation)
 
-Official implementation of **LiteFPV-SOD: An Ultra-Lightweight Detector for Real-Time Small-Object Detection on Edge-Deployed FPV Drones**.
+Official repository for **LiteFPV-SOD: An Ultra-Lightweight Detector for Real-Time Small-Object Detection on Edge-Deployed FPV Drones**.
 
-LiteFPV-SOD is an ultra-lightweight object detector designed for real-time small-object detection in UAV and FPV-drone imagery. The framework is developed for challenging aerial scenes where targets are small, visually weak, and affected by high altitude, low illumination, motion blur, cluttered backgrounds, and low foreground-background contrast.
+LiteFPV-SOD is an ultra-lightweight object detector designed for real-time small-object detection in UAV and FPV-drone imagery. The framework targets challenging aerial scenes where objects are small, visually weak, and affected by high altitude, poor illumination, motion blur, cluttered backgrounds, and low foreground-background contrast.
+
+---
+
+## Code Availability
+
+The complete source code, training scripts, evaluation scripts, deployment scripts, configuration files, and pretrained weights will be uploaded after the paper is accepted.
+
+At the current stage, this repository provides the project description, dataset information, experimental summary, and planned usage instructions for reproducibility.
 
 ---
 
@@ -20,7 +28,7 @@ LiteFPV-SOD is an ultra-lightweight object detector designed for real-time small
 - **BiFPN-based multi-scale fusion** for stronger bidirectional feature aggregation.
 - **Depthwise separable convolution (DWConv)** for reduced computational complexity.
 - Evaluated on **UAV-SOD**, **VisDrone2019**, and **DOTA-v1.5**.
-- Robustness tested under **RGB**, **grayscale**, and **synthetic night-vision** conditions.
+- Robustness evaluated under **RGB**, **grayscale**, and **synthetic night-vision** conditions.
 - Real onboard deployment on an FPV drone with **Raspberry Pi 5**, achieving approximately **20–25 FPS**.
 
 ---
@@ -30,16 +38,16 @@ LiteFPV-SOD is an ultra-lightweight object detector designed for real-time small
 LiteFPV-SOD consists of four main components:
 
 1. **FFNet Backbone**  
-   Extracts hierarchical multi-scale features while preserving fine-grained spatial information.
+   Extracts hierarchical multi-scale features while preserving fine-grained spatial information required for small-object detection.
 
-2. **LFFM Neck Module**  
-   Uses a split-refine-fuse strategy to improve lightweight feature aggregation.
+2. **Lightweight Feature Fusion Module (LFFM)**  
+   Uses a split-refine-fuse strategy to improve feature interaction while maintaining low computational overhead.
 
 3. **BiFPN-Based Multi-Scale Fusion**  
-   Strengthens top-down and bottom-up feature interaction for small objects with large scale variation.
+   Strengthens top-down and bottom-up feature aggregation for objects with large scale variation.
 
 4. **DWConv-Based Efficient Feature Aggregation**  
-   Reduces computational cost while maintaining detection capability.
+   Reduces computational complexity by separating spatial filtering and channel mixing.
 
 <p align="center">
   <img src="assets/litefpv_sod_architecture.png" width="900">
@@ -57,7 +65,7 @@ LiteFPV-SOD consists of four main components:
 | VisDrone2019 | 49.3 | 33.8 | 4.1M | 14.9G | 8.6 MB | 293 |
 | DOTA-v1.5 | 50.7 | 35.4 | 4.1M | 14.9G | 8.6 MB | 194 |
 
-> Note: GPU FPS values were measured on the workstation GPU platform. Onboard deployment FPS was evaluated separately on the Raspberry Pi 5-based FPV drone platform.
+> **Note:** GPU FPS values were measured on the workstation GPU platform. Onboard deployment FPS was evaluated separately on the Raspberry Pi 5-based FPV drone platform.
 
 ### Onboard Deployment Result
 
@@ -68,6 +76,8 @@ LiteFPV-SOD consists of four main components:
 ---
 
 ## Installation
+
+> The complete code will be released after paper acceptance. The following installation instructions are prepared for the official code release.
 
 ### 1. Clone the repository
 
@@ -144,84 +154,72 @@ datasets/
         └── val/
 ```
 
-### UAV-SOD Dataset
+### Data_preprocessing<br>
 
-The UAV-SOD dataset can be accessed upon reasonable request:
+Raw data must be preprocessed before being fed into the network for training or testing. First, image preprocessing methods such as brightness correction and image filtering are applied to selected sample images to improve dataset quality. Then, the annotation software **LabelImg** is used to draw ground-truth bounding boxes for all object instances in the images. The annotations are saved in YOLO-compatible text format for detector training and evaluation.
 
-```text
-https://github.com/dhuvisionlab/UAV-SOD_Dataset.git
-```
+Visit this link to download LabelImg:  
+https://github.com/HumanSignal/labelImg
+
+### Data_Download<br>
+
+Visit this link to download the dataset:  
+https://github.com/dhuvisionlab/SOD-Dataset
 
 ### DOTA-v1.5 Annotation Conversion
 
 DOTA-v1.5 uses oriented bounding-box annotations. For LiteFPV-SOD training, the annotations should be converted into horizontal bounding boxes.
 
 ```bash
-python tools/convert_dota_to_yolo.py \
-  --src datasets/DOTA-v1.5/original_annotations \
-  --dst datasets/DOTA-v1.5/labels
+python tools/convert_dota_to_yolo.py   --src datasets/DOTA-v1.5/original_annotations   --dst datasets/DOTA-v1.5/labels
 ```
 
 ---
 
 ## Training
 
+> Training scripts and configuration files will be uploaded after paper acceptance.
+
 ### Train on UAV-SOD
 
 ```bash
-python tools/train.py \
-  --config configs/train/train_uav_sod.yaml \
-  --data configs/data/uav_sod.yaml \
-  --model configs/model/litefpv_sod.yaml
+python tools/train.py   --config configs/train/train_uav_sod.yaml   --data configs/data/uav_sod.yaml   --model configs/model/litefpv_sod.yaml
 ```
 
 ### Train on VisDrone2019
 
 ```bash
-python tools/train.py \
-  --config configs/train/train_visdrone.yaml \
-  --data configs/data/visdrone2019.yaml \
-  --model configs/model/litefpv_sod.yaml
+python tools/train.py   --config configs/train/train_visdrone.yaml   --data configs/data/visdrone2019.yaml   --model configs/model/litefpv_sod.yaml
 ```
 
 ### Train on DOTA-v1.5
 
 ```bash
-python tools/train.py \
-  --config configs/train/train_dota.yaml \
-  --data configs/data/dota_v15.yaml \
-  --model configs/model/litefpv_sod.yaml
+python tools/train.py   --config configs/train/train_dota.yaml   --data configs/data/dota_v15.yaml   --model configs/model/litefpv_sod.yaml
 ```
 
 ---
 
 ## Evaluation
 
+> Evaluation scripts and pretrained weights will be uploaded after paper acceptance.
+
 ### Evaluate on UAV-SOD
 
 ```bash
-python tools/val.py \
-  --weights weights/litefpv_sod_uav_sod.pt \
-  --data configs/data/uav_sod.yaml \
-  --img 640
+python tools/val.py   --weights weights/litefpv_sod_uav_sod.pt   --data configs/data/uav_sod.yaml   --img 640
 ```
 
 ### Evaluate on VisDrone2019
 
 ```bash
-python tools/val.py \
-  --weights weights/litefpv_sod_visdrone.pt \
-  --data configs/data/visdrone2019.yaml \
-  --img 640
+python tools/val.py   --weights weights/litefpv_sod_visdrone.pt   --data configs/data/visdrone2019.yaml   --img 640
 ```
 
 ### Evaluate on DOTA-v1.5
 
 ```bash
-python tools/val.py \
-  --weights weights/litefpv_sod_dota.pt \
-  --data configs/data/dota_v15.yaml \
-  --img 640
+python tools/val.py   --weights weights/litefpv_sod_dota.pt   --data configs/data/dota_v15.yaml   --img 640
 ```
 
 ---
@@ -230,60 +228,46 @@ python tools/val.py \
 
 LiteFPV-SOD supports robustness evaluation under grayscale and synthetic night-vision conditions.
 
+> Robustness preprocessing scripts will be uploaded after paper acceptance.
+
 ### Generate grayscale dataset
 
 ```bash
-python tools/make_grayscale_dataset.py \
-  --src datasets/UAV-SOD/images \
-  --dst datasets/UAV-SOD-Grayscale/images
+python tools/make_grayscale_dataset.py   --src datasets/UAV-SOD/images   --dst datasets/UAV-SOD-Grayscale/images
 ```
 
 ### Generate synthetic night-vision dataset
 
 ```bash
-python tools/make_night_vision_dataset.py \
-  --src datasets/UAV-SOD/images \
-  --dst datasets/UAV-SOD-NightVision/images
+python tools/make_night_vision_dataset.py   --src datasets/UAV-SOD/images   --dst datasets/UAV-SOD-NightVision/images
 ```
 
 ### Evaluate robustness
 
 ```bash
-python tools/val.py \
-  --weights weights/litefpv_sod_uav_sod.pt \
-  --data configs/data/uav_sod_grayscale.yaml \
-  --img 640
+python tools/val.py   --weights weights/litefpv_sod_uav_sod.pt   --data configs/data/uav_sod_grayscale.yaml   --img 640
 ```
 
 ```bash
-python tools/val.py \
-  --weights weights/litefpv_sod_uav_sod.pt \
-  --data configs/data/uav_sod_nightvision.yaml \
-  --img 640
+python tools/val.py   --weights weights/litefpv_sod_uav_sod.pt   --data configs/data/uav_sod_nightvision.yaml   --img 640
 ```
 
 ---
 
 ## Inference
 
+> Inference scripts will be uploaded after paper acceptance.
+
 ### Image inference
 
 ```bash
-python tools/infer_image.py \
-  --weights weights/litefpv_sod_uav_sod.pt \
-  --source assets/demo.jpg \
-  --img 640 \
-  --conf 0.25
+python tools/infer_image.py   --weights weights/litefpv_sod_uav_sod.pt   --source assets/demo.jpg   --img 640   --conf 0.25
 ```
 
 ### Video inference
 
 ```bash
-python tools/infer_video.py \
-  --weights weights/litefpv_sod_uav_sod.pt \
-  --source assets/demo.mp4 \
-  --img 640 \
-  --conf 0.25
+python tools/infer_video.py   --weights weights/litefpv_sod_uav_sod.pt   --source assets/demo.mp4   --img 640   --conf 0.25
 ```
 
 ---
@@ -293,10 +277,7 @@ python tools/infer_video.py \
 To measure FLOPs, parameters, inference time, and FPS:
 
 ```bash
-python tools/profile_model.py \
-  --weights weights/litefpv_sod_uav_sod.pt \
-  --img 640 \
-  --device 0
+python tools/profile_model.py   --weights weights/litefpv_sod_uav_sod.pt   --img 640   --device 0
 ```
 
 ---
@@ -304,6 +285,8 @@ python tools/profile_model.py \
 ## Raspberry Pi / FPV Drone Deployment
 
 LiteFPV-SOD was deployed on an FPV drone platform using a Raspberry Pi 5 and a 1080p HD camera module.
+
+> Raspberry Pi deployment scripts will be uploaded after paper acceptance.
 
 ### Install on Raspberry Pi
 
@@ -315,19 +298,13 @@ bash install_rpi.sh
 ### Run real-time camera inference
 
 ```bash
-python deployment/raspberry_pi/camera_inference.py \
-  --weights weights/litefpv_sod_rpi.pt \
-  --camera 0 \
-  --img 640 \
-  --conf 0.25
+python deployment/raspberry_pi/camera_inference.py   --weights weights/litefpv_sod_rpi.pt   --camera 0   --img 640   --conf 0.25
 ```
 
 ### FPS test
 
 ```bash
-python deployment/raspberry_pi/fps_test.py \
-  --weights weights/litefpv_sod_rpi.pt \
-  --camera 0
+python deployment/raspberry_pi/fps_test.py   --weights weights/litefpv_sod_rpi.pt   --camera 0
 ```
 
 ---
@@ -346,6 +323,8 @@ Pretrained weights will be released after manuscript acceptance.
 ---
 
 ## Repository Structure
+
+The planned repository structure is shown below. The complete code will be uploaded after the paper is accepted.
 
 ```text
 LiteFPV-SOD/
